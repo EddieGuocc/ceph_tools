@@ -78,7 +78,7 @@
 
 7. **[主节点操作]**主节点向各个节点安装ceph，**安装前一定要注意软件园已经更换为2中的163源**
 
-		ceph-deploy install ceph1 ceph2 ceph3
+		ceph-deploy install --no-adjust-repos ceph1 ceph2 ceph3
 
 8. **[基于实际配置修改]**ceph配置文件修改，添加public_network属性
 
