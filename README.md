@@ -28,11 +28,12 @@ ceph核心组件
     一个新的文件存入ceph的过程：
     1. file进入，进行分片，例如4M每个，拆分成多个object，每个object由file的元数据(元数据指数据的属性，位
     置，大小，储存时间) + ceph条带化生成的Object的序列号组成。  --得到oid(hash值)
-    2. 根据oid和mark(mark 为集群中 PG总数 - 1)计算出pgid
+    2. poolid + oid % pg_nums = 确定的某个pgid，诸如 5.12
     3. Crush算法接受pgid，返回包含n个OSD的集合，诸如[2,5,7]
     其中pg(placement group)属于一个逻辑概念，添加在储存对象和OSD之间，与OSD是映射关系(逻辑 -> 物理)，是一
     个对象的合集，按照上述iii中的结合结果，此时该pg内的所有Object都会在osd.2,osd.5,osd.7中保存3分副本，而
-    这三个osd也承担了共同存储和维护Object的任务,2为主，5，7为从。
+    这三个osd也承担了共同存储和维护Object的任务,2为主，5，7为从，这样的好处是不论物理节点(OSD的新增与减少)如
+    何变化，数据到pg的映射是稳定的，pg数量基本是保持不变得，保证了数据的可靠性。
     
 2. Monitor
 
